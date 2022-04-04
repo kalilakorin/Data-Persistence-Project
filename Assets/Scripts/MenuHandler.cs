@@ -8,7 +8,6 @@ using TMPro;
 
 public class MenuHandler : MonoBehaviour
 {
-    //public InputField playerName;
 
     public TMPro.TMP_InputField playerName;
 
@@ -17,23 +16,20 @@ public class MenuHandler : MonoBehaviour
         playerName.onEndEdit.AddListener(SubmitName);
     }
 
-    private void SubmitName(string name)
+    private void SubmitName(string playerName)
     {
-        //Debug.Log(name);
-        DataManager.Instance.Name = name;
+        Debug.Log(playerName + " " + playerName.GetType());
+        DataManager.Instance.setName(playerName);
     }
 
     public void StartGame()
     {
-        //playerName.
-        //MainManager.Instance.HighScoreName = playerName;
+        DataManager.Instance.LoadScore();
         SceneManager.LoadScene(1);
     }
 
     public void Exit()
     {
-        //MainManager.Instance.SaveScore();
-
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode(); //quit play mode
 #else

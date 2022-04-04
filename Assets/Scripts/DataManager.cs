@@ -7,28 +7,47 @@ using System.IO;
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
-    public Text HighScore;
-    public string Name;
+    public int highScore;
+    public string highScorePlayerName;
+    private string playerName;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        LoadScore();
+    }
+
+    public void setName(string name)
+    {
+        playerName = name;
+    }
+
+    public void setHighScore(int score)
+    {
+        highScore = score;
+        highScorePlayerName = playerName;
+        SaveScore();
+    }
 
     [System.Serializable]
     class SaveData
     {
-        public Text HighScore;
-        public string Name;
+        public int HighScore;
+        public string PlayerName;
     }
 
     public void SaveScore()
     {
         SaveData data = new SaveData();
-        data.HighScore = HighScore;
-        data.Name = Name;
-
-        /*int highScore = System.Convert.ToInt32(HighScore); //int.Parse(HighScore.ToString());
-
-        if (m_Points > highScore)
-        {
-            HighScore.text = m_Points.ToString();
-        }*/
+        data.HighScore = highScore;
+        data.PlayerName = highScorePlayerName;
 
         string json = JsonUtility.ToJson(data);
 
@@ -43,10 +62,8 @@ public class DataManager : MonoBehaviour
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-            HighScore = data.HighScore;
-            Name = data.Name;
-        }
-
-        //HighScore.text = "Best score: " + Instance.HighScore + "-" + Instance.HighScoreName;
+            highScore = data.HighScore;
+            highScorePlayerName = data.PlayerName;
+        }        
     }
 }
